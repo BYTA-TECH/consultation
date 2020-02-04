@@ -1,0 +1,74 @@
+
+entity Consultation {
+
+	trackingId String,
+	patientIdpCode String,
+	date LocalDate,
+	phoneNumber String  
+}
+entity Diagnosis{
+	diagnosisRef String
+}
+entity Symptom {
+
+	symptomRef String
+	
+}
+
+ 
+  
+entity ParamedicalExamination {
+	/**
+   * @deprecated bp
+   */
+    bp String,
+    /**
+    * @deprecated height
+    */
+	height Double,
+    /**
+   * @deprecated weight
+   */
+	weight Double,
+    /**
+   * @deprecated temperature
+   */
+	temperature Double
+    
+}
+
+entity BasicCheckUp {
+	
+	height Double,
+	weight Double,
+	temperature Double,
+    bp String,
+    checkUpStatus String
+}
+
+entity Prescription {
+	
+    prescriptionDMSURL String,
+    drug String,
+    dose String,
+    frequency String,
+    period String	
+}
+
+relationship OneToOne {
+	
+	Consultation{prescription} to Prescription,
+    Consultation{diagnosis} to Diagnosis,
+    Consultation{BasicCheckUp} to BasicCheckUp	
+}
+relationship OneToMany {
+  
+	Consultation{symptom} to Symptom
+
+}
+
+paginate * with pagination
+
+service all with serviceImpl
+
+dto all with mapstruct
