@@ -42,11 +42,11 @@ public class ConsultationCommandResource {
 	}
 	 @PostMapping("/patient/storeHistory/{processId}")
 		 public NextTaskResource storeHistory(@PathVariable String processId, @RequestParam(value = "otp", required = false) String otp,@RequestParam(value = "choice", required = false) String choice) {  			
-			return consultationCommandService.storeHistory( processId, otp ,choice);
+			return consultationCommandService.storeHistory(processId,otp,choice);
 		}	
 	@PostMapping("/consultPatient/{processId}")
 	public Consultation consultPatient(@PathVariable String processId, @RequestBody Prescription prescription) {
-		Consultation result=consultationCommandService.consultPatient(processId,prescription );
+		Consultation result=consultationCommandService.consultPatient(processId,prescription);
 		return result;
 	}
 	@PostMapping("/savePatientPrescription/{processId}")

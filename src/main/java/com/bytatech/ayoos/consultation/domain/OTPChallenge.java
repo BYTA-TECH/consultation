@@ -1,7 +1,5 @@
 package com.bytatech.ayoos.consultation.domain;
 
- 
-
 public class OTPChallenge {
 
 

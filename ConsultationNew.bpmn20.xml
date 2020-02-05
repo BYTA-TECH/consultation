@@ -22,7 +22,7 @@
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
       </extensionElements>
     </userTask>
-    <userTask id="sid-84BB63A6-E98C-46B9-BAAB-D298AA10E757" name="Accept Prescription" activiti:assignee="${doctor}" activiti:candidateGroups="doctor" activiti:formKey="AcceptPrescription">
+    <userTask id="sid-84BB63A6-E98C-46B9-BAAB-D298AA10E757" name="Add Prescription" activiti:assignee="${doctor}" activiti:candidateGroups="doctor" activiti:formKey="AcceptPrescription">
       <extensionElements>
         <activiti:formProperty id="prescriptionStatus" type="string"></activiti:formProperty>
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
