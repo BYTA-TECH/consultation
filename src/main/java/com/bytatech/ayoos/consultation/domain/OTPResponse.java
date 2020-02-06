@@ -1,8 +1,7 @@
 package com.bytatech.ayoos.consultation.domain;
-
  
-
 import java.util.HashSet;
+
 import java.util.Set;
 
 public class OTPResponse {

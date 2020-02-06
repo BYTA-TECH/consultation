@@ -231,11 +231,11 @@ activiti:
        username: kermit
        password: kermit
 dms:
-  url: https://nrl3nr.trial.alfresco.com/alfresco/api/-default-/public/alfresco/versions/1
+  url: https://gotjmq.trial.alfresco.com/alfresco/api/-default-/public/alfresco/versions/1
   security:
     basicAuth:
-       username: ajay.e.s@lxisoft.com   
-       password: yadu8giy7b
+       username: sarath.kumar.s@lxisoft.com   
+       password: fg5q4riwxy
 smsgateway:
    uk-url: https://api.txtlocal.com
    uk-sender: CONSULT

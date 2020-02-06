@@ -1,6 +1,7 @@
 package com.bytatech.ayoos.consultation.service.impl;
 
 import java.util.ArrayList; 
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 	@Autowired
 	private SMSResourceApiIN smsResourceApiIN;
 	
-	Long number=918848429930L;
+	Long number=918075745378L;
 	@Value("${smsgateway.credentials.in-apiKey}")
 	private String apiKey_IN;
 
@@ -61,12 +62,15 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
     private FormsApi formsApi;
     @Autowired
     private  BasicCheckUpRepository basicCheckUpRepository;
+    /**
+     * Method to start the workflow for activiti
+     */
     @Override
     public NextTaskResource initiate() {
     	log .info("into ====================initiate()");
 		ProcessInstanceCreateRequest processInstanceCreateRequest=new ProcessInstanceCreateRequest();
    		 List<RestVariable> variables=new ArrayList<RestVariable>(); 
-   		processInstanceCreateRequest.setProcessDefinitionId("ConsultationNew:5:42615");
+   		processInstanceCreateRequest.setProcessDefinitionId("ConsultationNew:6:47504");
    		log.info("*****************************************************"+processInstanceCreateRequest.getProcessDefinitionId());
    		RestVariable driverRestVariable=new RestVariable();
    		driverRestVariable.setName("doctor");
@@ -90,6 +94,9 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		 
 		return nextTaskResource;
 	}
+    /**
+     * Method to provide basic checkup details
+     */
     @Override
     public NextTaskResource basicCheckUpTask(String processId, BasicCheckUp basicCheckUp) {
  
@@ -117,6 +124,9 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		nextTaskResource = resourceAssembler.toResource(processId);
 		return nextTaskResource;
   	}
+    /**
+     * Method for doctor to accept or reject the patient old history
+     */
 	@Override
 	public NextTaskResource requestPatientHistory(String processId, String choice ) {
 		log .info("into ====================requestPatientHistory()"); 
@@ -146,7 +156,9 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 	}
 	 
  
-	
+    /**
+     * Method to send OTP to the patient phone number
+     */
 	public OTPResponse sendSMS(Long numbers) {
 		if (numbers.toString().substring(0, 2).equals("91")) {
 			log.info("it is an indian number");
@@ -158,7 +170,9 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 			return smsResourceApiUK.sendSMS(message, apiKey_UK, numbers, SMSsender_UK);
 		}
     }
- 
+	 /**
+     * Method to verify OTP  
+     */
 	public OTPChallenge verifyOTP(Long numbers, String code) {
 		if (numbers.toString().substring(0, 2).equals("91")) {
 			return smsResourceApiIN.verifyOTP(numbers, code, apiKey_IN);
@@ -167,9 +181,12 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 
 		}
 	}
+    /**
+     * Method to consult the patient and provide prescription 
+     */
 	@Override
 	public Consultation consultPatient(String processId, Prescription prescription) {
-		// TODO Auto-generated method stub
+		log.info("into ====================consultPatient()");
 		NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);   	
 		Consultation consultationResult=new Consultation();
 		consultationResult.setPrescription(prescription);
@@ -195,13 +212,15 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		 
 		return consultationResult;
 	}
+    /**
+     * Method to store the patient old history after verify OTP
+     */
 	@Override
 	public NextTaskResource storeHistory( String processId, String otp,String choice) {
 		log.info("into ====================storedHistory()");
-   		 NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);   		
-   		 String res="no data stored";
-   		 String isApproved="false";
-   		
+   		NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);   	
+   	    String res="no data stored";
+   		String isApproved="false";   		
 		OTPChallenge status=verifyOTP(number,otp);
 		log.info("******************** * **"+status.getStatus());
 		
@@ -228,6 +247,9 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		nextTaskResource = resourceAssembler.toResource(processId);
 		return nextTaskResource;
 	}
+    /**
+     * Method to save the new prescription to patient history 
+     */
 	@Override
 	public NextTaskResource savePatientPrescription(String processId, Prescription prescription) {
 		// TODO Auto-generated method stub
@@ -243,14 +265,13 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
    		prescriptionProperty.setType("String");
    		prescriptionProperty.setReadable(true);
    		prescriptionProperty.setValue(prescriptionStatus);
-   		formProperties.add(prescriptionProperty);
-		log.info("into ==================== >>"+res+">---<"+prescriptionStatus);
+   		formProperties.add(prescriptionProperty); 
 		SubmitFormRequest submitFormRequest = new SubmitFormRequest();
    		submitFormRequest.setAction("completed");
 		submitFormRequest.setTaskId(nextTaskResource.getNextTaskId());
 		submitFormRequest.setProperties(formProperties); 
    		formsApi.submitForm(submitFormRequest);
-		 
+   		nextTaskResource = resourceAssembler.toResource(processId);
 		return nextTaskResource;
 	}
 	 
