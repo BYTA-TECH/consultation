@@ -16,7 +16,6 @@ import com.bytatech.ayoos.consultation.domain.Prescription;
 import com.bytatech.ayoos.consultation.resource.assembler.NextTaskResource;
 import com.bytatech.ayoos.consultation.service.ConsultationCommandService; 
  
-
 @RestController
 @RequestMapping("/api")
 public class ConsultationCommandResource {
@@ -43,7 +42,7 @@ public class ConsultationCommandResource {
 	 @PostMapping("/patient/storeHistory/{processId}")
 		 public NextTaskResource storeHistory(@PathVariable String processId, @RequestParam(value = "otp", required = false) String otp,@RequestParam(value = "choice", required = false) String choice) {  			
 			return consultationCommandService.storeHistory(processId,otp,choice);
-		}	
+		}	     
 	@PostMapping("/consultPatient/{processId}")
 	public Consultation consultPatient(@PathVariable String processId, @RequestBody Prescription prescription) {
 		Consultation result=consultationCommandService.consultPatient(processId,prescription);
@@ -54,7 +53,5 @@ public class ConsultationCommandResource {
 		NextTaskResource task=consultationCommandService.savePatientPrescription(processId,prescription );
 		return task;
 	}
-
-	
     
 }
