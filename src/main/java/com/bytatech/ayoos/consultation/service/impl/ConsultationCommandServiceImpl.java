@@ -91,8 +91,7 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		
    		processInstanceApi.createProcessInstance(processInstanceCreateRequest);
    		NextTaskResource nextTaskResource = resourceAssembler.toResource(processInstanceId);
-		 
-		return nextTaskResource;
+		 return nextTaskResource;
 	}
     /**
      * Method to provide basic checkup details
@@ -124,6 +123,7 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		nextTaskResource = resourceAssembler.toResource(processId);
 		return nextTaskResource;
   	}
+    
     /**
      * Method for doctor to accept or reject the patient old history
      */
@@ -134,24 +134,7 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
    		  if(choice.equals("Accept")) {
 			 OTPResponse res= sendSMS(number);			
 		}
-		  else {
-			    String isApproved="false";
-				List<RestFormProperty>formProperties=new ArrayList<RestFormProperty>();
-		   		RestFormProperty approveProperty = new RestFormProperty();
-		   		approveProperty.setId("isApproved");
-		   		approveProperty.setName("isApproved");
-		   		approveProperty.setType("String");
-		   		approveProperty.setReadable(true);
-		   		approveProperty.setValue(isApproved);
-		   		formProperties.add(approveProperty);
-				log.info("into ================>---<"+isApproved);
-				SubmitFormRequest submitFormRequest = new SubmitFormRequest();
-		   		submitFormRequest.setAction("completed");
-				submitFormRequest.setTaskId(nextTaskResource.getNextTaskId());
-				submitFormRequest.setProperties(formProperties); 
-		   		formsApi.submitForm(submitFormRequest);
-				nextTaskResource = resourceAssembler.toResource(processId);				 
-		 }
+		   
 		return nextTaskResource;
 	}
 	 
@@ -190,18 +173,18 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);   	
 		Consultation consultationResult=new Consultation();
 		consultationResult.setPrescription(prescription);
-		String isPrescription="false";
+		String diagnosisStatus="false";
 		if(!(prescription.equals(null)) ){
-			isPrescription="true";
+			diagnosisStatus="true";
 		}
 		List<RestFormProperty>formProperties=new ArrayList<RestFormProperty>();
-   		RestFormProperty prescriptionProperty = new RestFormProperty();
-   		prescriptionProperty.setId("isPrescription");
-   		prescriptionProperty.setName("isPrescription");
-   		prescriptionProperty.setType("String");
-   		prescriptionProperty.setReadable(true);
-   		prescriptionProperty.setValue(isPrescription);
-   		formProperties.add(prescriptionProperty);
+   		RestFormProperty diagnosisProperty = new RestFormProperty();
+   		diagnosisProperty.setId("diagnosisStatus");
+   		diagnosisProperty.setName("diagnosisStatus");
+   		diagnosisProperty.setType("String");
+   		diagnosisProperty.setReadable(true);
+   		diagnosisProperty.setValue(diagnosisStatus);
+   		formProperties.add(diagnosisProperty);
 	 
 		SubmitFormRequest submitFormRequest = new SubmitFormRequest();
    		submitFormRequest.setAction("completed");
@@ -220,31 +203,17 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 		log.info("into ====================storedHistory()");
    		NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);   	
    	    String res="no data stored";
-   		String isApproved="false";   		
+   	   		
 		OTPChallenge status=verifyOTP(number,otp);
 		log.info("******************** * **"+status.getStatus());
 		
 		if((status.getStatus()).equals("success"))
 		{
 			res="Data been stored"; 
-			isApproved="true";
+		 
 	
 		}
-		List<RestFormProperty>formProperties=new ArrayList<RestFormProperty>();
-   		RestFormProperty approveProperty = new RestFormProperty();
-   		approveProperty.setId("isApproved");
-   		approveProperty.setName("isApproved");
-   		approveProperty.setType("String");
-   		approveProperty.setReadable(true);
-   		approveProperty.setValue(isApproved);
-   		formProperties.add(approveProperty);
-		log.info("into ==================== >>"+res+">---<"+isApproved);
-		SubmitFormRequest submitFormRequest = new SubmitFormRequest();
-   		submitFormRequest.setAction("completed");
-		submitFormRequest.setTaskId(nextTaskResource.getNextTaskId());
-		submitFormRequest.setProperties(formProperties); 
-   		formsApi.submitForm(submitFormRequest);
-		nextTaskResource = resourceAssembler.toResource(processId);
+	 
 		return nextTaskResource;
 	}
     /**
@@ -253,19 +222,19 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
 	@Override
 	public NextTaskResource savePatientPrescription(String processId, Prescription prescription) {
 		// TODO Auto-generated method stub
-		String res="not saved prescription",prescriptionStatus=null	;
+		String res="not saved prescription",consultationStatus=null	;
 		if(!(prescription.equals(null)) ){
 			res="saved prescription";
 		}
 		NextTaskResource nextTaskResource = resourceAssembler.toResource(processId);  
 		List<RestFormProperty>formProperties=new ArrayList<RestFormProperty>();
-   		RestFormProperty prescriptionProperty = new RestFormProperty();
-   		prescriptionProperty.setId("prescriptionStatus");
-   		prescriptionProperty.setName("prescriptionStatus");
-   		prescriptionProperty.setType("String");
-   		prescriptionProperty.setReadable(true);
-   		prescriptionProperty.setValue(prescriptionStatus);
-   		formProperties.add(prescriptionProperty); 
+   		RestFormProperty consultationProperty = new RestFormProperty();
+   		consultationProperty.setId("consultationStatus");
+   		consultationProperty.setName("consultationStatus");
+   		consultationProperty.setType("String");
+   		consultationProperty.setReadable(true);
+   		consultationProperty.setValue(consultationStatus);
+   		formProperties.add(consultationProperty); 
 		SubmitFormRequest submitFormRequest = new SubmitFormRequest();
    		submitFormRequest.setAction("completed");
 		submitFormRequest.setTaskId(nextTaskResource.getNextTaskId());

@@ -15,9 +15,7 @@ public interface ConsultationCommandService {
 
 	NextTaskResource requestPatientHistory(String processId, String choice );
 	Consultation consultPatient( String processId, Prescription prescription );
-
-	 
-	   NextTaskResource storeHistory( String processId, String otp,String choice);
+    NextTaskResource storeHistory( String processId, String otp,String choice);
 
 	NextTaskResource savePatientPrescription(String processId, Prescription prescription);
 }
