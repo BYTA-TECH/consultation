@@ -70,7 +70,7 @@ public class ConsultationCommandServiceImpl implements ConsultationCommandServic
     	log .info("into ====================initiate()");
 		ProcessInstanceCreateRequest processInstanceCreateRequest=new ProcessInstanceCreateRequest();
    		 List<RestVariable> variables=new ArrayList<RestVariable>(); 
-   		processInstanceCreateRequest.setProcessDefinitionId("ConsultationNew:6:47504");
+   		processInstanceCreateRequest.setProcessDefinitionId("ConsultationNew:7:50004");
    		log.info("*****************************************************"+processInstanceCreateRequest.getProcessDefinitionId());
    		RestVariable driverRestVariable=new RestVariable();
    		driverRestVariable.setName("doctor");
