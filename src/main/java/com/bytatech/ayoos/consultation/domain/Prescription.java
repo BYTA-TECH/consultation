@@ -38,7 +38,25 @@ public class Prescription implements Serializable {
     @Column(name = "period")
     private String period;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    
+    
+    /**
+	 * @param prescriptionDMSURL
+	 * @param drug
+	 * @param dose
+	 * @param frequency
+	 * @param period
+	 */
+	public Prescription(String prescriptionDMSURL, String drug, String dose, String frequency, String period) {
+		super();
+		this.prescriptionDMSURL = prescriptionDMSURL;
+		this.drug = drug;
+		this.dose = dose;
+		this.frequency = frequency;
+		this.period = period;
+	}
+
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
