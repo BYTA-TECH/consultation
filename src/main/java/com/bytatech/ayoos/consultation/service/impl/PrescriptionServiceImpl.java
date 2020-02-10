@@ -6,6 +6,15 @@ import com.bytatech.ayoos.consultation.repository.PrescriptionRepository;
 import com.bytatech.ayoos.consultation.repository.search.PrescriptionSearchRepository;
 import com.bytatech.ayoos.consultation.service.dto.PrescriptionDTO;
 import com.bytatech.ayoos.consultation.service.mapper.PrescriptionMapper;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +23,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -38,6 +51,53 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         this.prescriptionMapper = prescriptionMapper;
         this.prescriptionSearchRepository = prescriptionSearchRepository;
     }
+    
+    /**
+     * Get the List of prescription with dummy data.
+  	* 
+  	* @return the List : This method returns Prescription objectList. 
+  	*
+  	*/
+    public static List<Prescription> getPrescriptionList() {
+    	List<Prescription> prescriptionList = new ArrayList<Prescription>();
+    	prescriptionList.add(new Prescription("aaaaaaa", "Paracetamol", "500mg" ,"3" ," 7Days"));
+        
+//    	prescription.add(new Prescription("","","","",""));
+//        
+//    	prescription.add(new Prescription());
+//        
+//    	prescription.add(new Prescription());
+        
+        return prescriptionList;
+
+    }
+    
+    /**
+     * Gets prescriptionReport : using javabean.
+     *
+     * @return the byte[].
+     *
+     * @throws JRException.
+     */
+   
+     @Override
+    public byte[] getReportAsPdfUsingJavaBean() throws JRException {
+      	      
+  	     JasperReport jr = JasperCompileManager.compileReport("src/main/resources/prescription_javabean.jrxml");
+
+  	     JRBeanCollectionDataSource collectionDatasource = new JRBeanCollectionDataSource(getPrescriptionList());
+  	            	   
+  	     
+ //Preparing parameters
+  	     Map<String, Object> parameters = new HashMap<String, Object>();
+  	            	   
+  	     JasperPrint jp = JasperFillManager.fillReport(jr, parameters, collectionDatasource);
+  	   
+  	     return JasperExportManager.exportReportToPdf(jp);
+      
+       }
+
+
 
     /**
      * Save a prescription.
@@ -110,4 +170,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         return prescriptionSearchRepository.search(queryStringQuery(query), pageable)
             .map(prescriptionMapper::toDto);
     }
+    
+    
 }

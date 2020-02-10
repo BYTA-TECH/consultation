@@ -2,6 +2,8 @@ package com.bytatech.ayoos.consultation.service;
 
 import com.bytatech.ayoos.consultation.service.dto.PrescriptionDTO;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -53,4 +55,15 @@ public interface PrescriptionService {
      * @return the list of entities.
      */
     Page<PrescriptionDTO> search(String query, Pageable pageable);
+
+    /**
+     * Gets prescriptionReport : using javabean.
+     *
+     * @return the byte[].
+     *
+     * @throws JRException.
+     */
+    
+	byte[] getReportAsPdfUsingJavaBean() throws JRException;
 }
+
