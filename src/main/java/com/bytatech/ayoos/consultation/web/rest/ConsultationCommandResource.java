@@ -31,6 +31,7 @@ public class ConsultationCommandResource {
 	}
 	@PostMapping("/basicCheckup/{processId}")
 	public NextTaskResource basicCheckUpTask(@PathVariable String processId, @RequestBody BasicCheckUp basicCheckUp) {
+		consultationCommandService.initiate();
 		NextTaskResource task=consultationCommandService.basicCheckUpTask(processId,basicCheckUp);
 		return task;
 	}
